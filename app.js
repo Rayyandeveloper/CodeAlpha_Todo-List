@@ -40,9 +40,9 @@ function addTask(){
 
 addBtn.addEventListener("click", addTask);
 
-taskInput.addEventListener("keypress", (e)=>{
+taskInput.addEventListener("keydown", (e) => {
 
-  if(e.key === "Enter"){
+  if (e.key === "Enter") {
     addTask();
   }
 
