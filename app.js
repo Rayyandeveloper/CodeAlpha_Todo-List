@@ -12,6 +12,42 @@ let currentFilter = "all";
 
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+function saveTasks(){
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function addTask(){
+
+  const text = taskInput.value.trim();
+
+  if(text === ""){
+    alert("Please enter a task");
+    return;
+  }
+
+  tasks.push({
+    text: text,
+    completed: false
+  });
+
+  saveTasks();
+
+  taskInput.value = "";
+
+  renderTasks();
+
+}
+
+addBtn.addEventListener("click", addTask);
+
+taskInput.addEventListener("keypress", (e)=>{
+
+  if(e.key === "Enter"){
+    addTask();
+  }
+
+});
+
 function renderTasks(){
 
   taskList.innerHTML = "";
@@ -26,7 +62,7 @@ function renderTasks(){
     filteredTasks = tasks.filter(task => task.completed);
   }
 
-  filteredTasks.forEach((task,index)=>{
+  filteredTasks.forEach((task)=>{
 
     const realIndex = tasks.indexOf(task);
 
@@ -60,7 +96,7 @@ function renderTasks(){
       </div>
     
     `;
-  
+
     taskDiv.querySelector(".check").addEventListener("click",()=>{
 
       tasks[realIndex].completed = !tasks[realIndex].completed;
@@ -70,10 +106,9 @@ function renderTasks(){
 
     });
 
-
     taskDiv.querySelector(".edit").addEventListener("click",()=>{
 
-      const newTask = prompt("Edit Task",task.text);
+      const newTask = prompt("Edit Task", task.text);
 
       if(newTask && newTask.trim() !== ""){
 
@@ -86,10 +121,9 @@ function renderTasks(){
 
     });
 
-
     taskDiv.querySelector(".delete").addEventListener("click",()=>{
 
-      tasks.splice(realIndex,1);
+      tasks.splice(realIndex, 1);
 
       saveTasks();
       renderTasks();
@@ -103,36 +137,6 @@ function renderTasks(){
   updateStats();
 
 }
-
-addBtn.addEventListener("click",()=>{
-
-  const text = taskInput.value.trim();
-
-  if(text === ""){
-
-    alert("Please enter a task");
-    return;
-
-  }
-
-  tasks.push({
-    text:text,
-    completed:false
-  });
-
-  taskInput.value = "";
-
-  saveTasks();
-  renderTasks();
-
-});
-
-function saveTasks(){
-
-  localStorage.setItem("tasks",JSON.stringify(tasks));
-
-}
-
 
 function updateStats(){
 
@@ -170,17 +174,7 @@ filters.forEach(button => {
 
     const text = button.innerText.toLowerCase();
 
-    if(text === "all"){
-      currentFilter = "all";
-    }
-
-    if(text === "pending"){
-      currentFilter = "pending";
-    }
-
-    if(text === "completed"){
-      currentFilter = "completed";
-    }
+    currentFilter = text;
 
     renderTasks();
 
